@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { PRESETS, ALL_KEYS, DIFFICULTY_OPTIONS } from '../data/presets';
+import { ALL_KEYS, DIFFICULTY_OPTIONS } from '../data/presets';
+import { generateJazz, generateBlues } from '../utils/progressionGenerator';
 import { transposeProgression } from '../utils/chordUtils';
 import { loadFavorites, saveFavorites, loadSettings } from '../utils/storage';
 import './HomePage.css';
@@ -60,21 +61,21 @@ export default function HomePage() {
   useEffect(() => () => clearInterval(timerRef.current), []);
 
   function generate() {
-    const pool = PRESETS[genre].filter(p =>
-      difficulty === '전체' || p.difficulty === difficulty
-    );
-    if (!pool.length) { showToast('조건에 맞는 진행이 없습니다'); return; }
+    const diffOptions = ['초급', '중급', '고급'];
+    const diff = difficulty === '전체' ? diffOptions[Math.floor(Math.random() * 3)] : difficulty;
 
-    const preset = pool[Math.floor(Math.random() * pool.length)];
-    const bars = transposeProgression(preset.bars, 'C', selectedKey);
+    const result = genre === 'jazz'
+      ? generateJazz(selectedKey, diff)
+      : generateBlues(selectedKey, diff);
+
     setProgression({
-      presetId: preset.id,
-      name: preset.name,
+      presetId: null,
+      name: result.name,
       genre,
-      sourceKey: 'C',
-      sourceBars: preset.bars,
+      sourceKey: selectedKey,
+      sourceBars: result.bars,
       key: selectedKey,
-      bars,
+      bars: result.bars,
       tempo: bpm,
     });
   }

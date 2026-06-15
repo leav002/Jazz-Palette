@@ -25,6 +25,9 @@ export default function Header() {
             <NavLink to="/library" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
               보관함
             </NavLink>
+            <NavLink to="/settings" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
+              설정
+            </NavLink>
           </nav>
         </div>
       </div>

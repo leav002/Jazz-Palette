@@ -40,6 +40,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+[data-theme="dark"] {
+  --bg: #111110;
+  --paper: #1a1a18;
+  --paper-2: #222220;
+  --ink: #e0d8c8;
+  --ink-2: #c8c0b0;
+  --ink-soft: #7a7268;
+  --ink-dim: #504840;
+  --rule: #e0d8c8;
+  --rule-soft: #2e2e2a;
+  --vermilion: #d94040;
+  --vermilion-2: #b83030;
+  --vermilion-soft: rgba(217, 64, 64, 0.12);
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+
 *,
 *::before,
 *::after {

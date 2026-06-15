@@ -36,13 +36,16 @@ const DOM7_QUALITIES = ['7', '7b9', '7#9', '7alt', '7b5', '7#5'];
 const RESOLUTION_QUALITIES = ['maj7', 'm7', '6', 'm6', 'maj9', 'm9'];
 
 export function applyTritoneSub(bars) {
-  return bars.map(chord => {
+  return bars.map((chord, i) => {
     const { root, quality } = parseChord(chord);
-    if (DOM7_QUALITIES.includes(quality)) {
-      const idx = NOTES.indexOf(root);
-      if (idx !== -1) return NOTES[(idx + 6) % 12] + '7';
-    }
-    return chord;
+    if (!DOM7_QUALITIES.includes(quality)) return chord;
+    const idx = NOTES.indexOf(root);
+    if (idx === -1) return chord;
+    const { root: nextRoot } = parseChord(bars[(i + 1) % bars.length]);
+    const nextIdx = NOTES.indexOf(nextRoot);
+    // Only substitute when this dom7 resolves up a perfect 4th (V7→I motion)
+    if (nextIdx === -1 || (nextIdx - idx + 12) % 12 !== 5) return chord;
+    return NOTES[(idx + 6) % 12] + '7';
   });
 }
 
@@ -55,8 +58,8 @@ export function applyIiVInsertion(bars) {
       const { root, quality } = parseChord(b);
       const idx = NOTES.indexOf(root);
       if (idx !== -1 && RESOLUTION_QUALITIES.includes(quality)) {
-        const iiRoot = NOTES[(idx + 10) % 12];
-        const vRoot = NOTES[(idx + 5) % 12];
+        const iiRoot = NOTES[(idx + 2) % 12];
+        const vRoot = NOTES[(idx + 7) % 12];
         result.push(iiRoot + 'm7', vRoot + '7');
       } else {
         result.push(a, b);
