@@ -39,7 +39,6 @@ export default function HomePage() {
           const p = JSON.parse(saved);
           setProgression(p);
           setSelectedKey(p.key);
-          setBpm(p.tempo || 120);
           if (p.genre) setGenre(p.genre);
         }
       } catch {}
